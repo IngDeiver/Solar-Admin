@@ -40,14 +40,18 @@ public class UserServiceImpl {
 				String[] fields = line.split(";");
 				Radiacion currentRadiacion = new Radiacion();
 				if(fields.length == 2) {
-					currentRadiacion.setEstacion(estacion);
 					
-					DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-					Date date = dateFormat.parse(fields[0]);
-					long time = date.getTime();
-					currentRadiacion.setFecha(new Timestamp(time));
-					currentRadiacion.setValor_radiacion(Double.parseDouble(fields[1]));
-					radiaciones.add(currentRadiacion);
+					try {
+						currentRadiacion.setEstacion(estacion);
+						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+						Date date = dateFormat.parse(fields[0]);
+						long time = date.getTime();
+						currentRadiacion.setFecha(new Timestamp(time));
+						currentRadiacion.setValor_radiacion(Double.parseDouble(fields[1]));
+						radiaciones.add(currentRadiacion);
+					} catch (Exception e) {
+						continue;
+					}
 				}
 			}
 			

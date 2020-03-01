@@ -9,6 +9,7 @@ import com.solar.model.Provedor;
 public interface EstacionService {
 	public Estacion save(String estacion, Municipio mu, Provedor pro,Double la, Double lon);
 	public List<Estacion> list();
-	public Estacion findById(Integer id);
 	public Estacion findByNombre_estacion(String nombre_estacion);
+	public Estacion findById(Integer id);
+	public void removeById(Integer id);
 }

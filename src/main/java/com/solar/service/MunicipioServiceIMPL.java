@@ -16,8 +16,8 @@ public class MunicipioServiceIMPL implements MunicipioService {
 	private MunicipioRepository municipioRepository;
 	
 	@Override
-	public Municipio save(String municipio) {
-		return municipioRepository.save(new Municipio(municipio));
+	public Municipio save(Municipio municipio) {
+		return municipioRepository.save(municipio);
 	}
 
 	@Override
@@ -28,6 +28,16 @@ public class MunicipioServiceIMPL implements MunicipioService {
 	@Override
 	public Municipio findByNombre(String nombre) {
 		return municipioRepository.findByNombre(nombre);
+	}
+	
+	@Override
+	public Municipio findById(Long id) {
+		return municipioRepository.findById(id).get();
+	}
+	
+	@Override
+	public void removeById(Long id) {
+		 municipioRepository.deleteById(id);
 	}
 
 }

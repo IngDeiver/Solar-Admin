@@ -29,6 +29,17 @@ public class ProvedorServiceIMPL implements ProvedorService{
 	public Provedor findByNombre(String nombre) {
 		return provedorRepository.findByNombre(nombre);
 	}
+
+	@Override
+	public Provedor findById(Long id) {
+		return provedorRepository.findById(id).get();
+	}
+
+	@Override
+	public void removeById(Long id) {
+		provedorRepository.deleteById(id);
+		
+	}
 	
 	
 }

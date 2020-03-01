@@ -31,13 +31,19 @@ public class EstacionServiceIMPL implements EstacionService {
 	@Override
 	public Estacion findById(Integer id) {
 		Estacion estacion = estacionRepository.findById(id).get();
-		System.out.println(estacion.getNombre_estacion());
 		return estacion;
 	}
 
 	@Override
 	public Estacion findByNombre_estacion(String nombre) {
 		return estacionRepository.findByNombre(nombre);
+	}
+
+
+	@Override
+	public void removeById(Integer id) {
+		 estacionRepository.deleteById(id);
+		
 	}
 
 
