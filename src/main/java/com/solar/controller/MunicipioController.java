@@ -24,10 +24,16 @@ public class MunicipioController {
 
 	@PostMapping
 	public String saveOrUpdateMunicipio(@ModelAttribute Municipio municipio, RedirectAttributes ra) {
-		Municipio municipioExist = municipioServiceIMPL.findById(municipio.getId_municipio());
-		municipioExist.setNombre(municipio.getNombre());
+		System.out.println(municipio.getId_municipio());
 		try {
-			municipioServiceIMPL.save(municipioExist);
+			if(municipio.getId_municipio()!=null) {
+				Municipio municipioExist = municipioServiceIMPL.findById(municipio.getId_municipio());
+				municipioExist.setNombre(municipio.getNombre());
+				municipioServiceIMPL.save(municipioExist);
+			}else {
+				municipioServiceIMPL.save(municipio);
+			}
+			
 			ra.addFlashAttribute("ok", "Municipio registrado");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
