@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-@Entity(name = "provedores")
+@Entity(name = "origenes")
 public class Provedor implements Serializable {
 	
 	/**
@@ -19,6 +19,7 @@ public class Provedor implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_origen")
 	private Long id_provedor;
 	
 	public Provedor() {
@@ -77,7 +78,7 @@ public class Provedor implements Serializable {
 
 
 
-	@Column(unique = true, nullable = false, length = 100)
+	@Column(unique = true, nullable = false, length = 100, name="nombre_origen")
 	private String nombre;
 
 	

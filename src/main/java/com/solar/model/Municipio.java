@@ -69,7 +69,7 @@ public class Municipio implements Serializable {
 	}
 
 
-	@Column(unique = true, nullable = false, length = 100)
+	@Column(unique = true, nullable = false, length = 100, name = "nombre_municipio")
 	private String nombre;
 
 

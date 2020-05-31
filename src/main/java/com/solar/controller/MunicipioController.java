@@ -24,7 +24,6 @@ public class MunicipioController {
 
 	@PostMapping
 	public String saveOrUpdateMunicipio(@ModelAttribute Municipio municipio, RedirectAttributes ra) {
-		System.out.println(municipio.getId_municipio());
 		try {
 			if(municipio.getId_municipio()!=null) {
 				Municipio municipioExist = municipioServiceIMPL.findById(municipio.getId_municipio());

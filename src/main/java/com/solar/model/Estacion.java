@@ -58,15 +58,17 @@ public class Estacion implements Serializable{
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id_estacion;
 	
-	@Column(unique = true, nullable = false, length = 100)
+	@Column(unique = true, nullable = false, length = 100, name = "nombre_estacion")
 	private String nombre;
+	
 	
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_municipio")
 	private Municipio municipio;
 	
+	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_provedor")
+	@JoinColumn(name = "id_origen")
 	private Provedor provedor;
 	
 	@Column(nullable = false)

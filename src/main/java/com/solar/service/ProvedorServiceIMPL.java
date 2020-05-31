@@ -16,8 +16,8 @@ public class ProvedorServiceIMPL implements ProvedorService{
 	private ProvedorRepository provedorRepository;
 
 	@Override
-	public Provedor save(String provedor) {
-		return provedorRepository.save(new Provedor(provedor));
+	public Provedor save(Provedor provedor) {
+		return provedorRepository.save(provedor);
 	}
 
 	@Override
