@@ -61,8 +61,6 @@ public class MunicipioController {
 			RedirectAttributes ar) {
 		try {
 			municipioServiceIMPL.removeById(id_municipio);
-			model.addAttribute("municipio", new Municipio());
-			model.addAttribute("municipios", this.getMunicipios());
 			ar.addFlashAttribute("ok", "Municipio eliminado");
 		} catch (Exception e) {
 			ar.addFlashAttribute("error", "No se pudo eliminar el municipio");

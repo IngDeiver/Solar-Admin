@@ -18,9 +18,8 @@ public class EstacionServiceIMPL implements EstacionService {
 	private EstacionRepository estacionRepository;
 
 	@Override
-	public Estacion save(String estacion, Municipio mu, Provedor pro, Double lat, Double lon) {
-		Estacion estacionSinUbicacion = estacionRepository.save(new Estacion(estacion, mu, pro, lat, lon));
-		return estacionSinUbicacion;
+	public Estacion save(Estacion estacion) {
+		return estacionRepository.save(estacion);
 	}
 
 	@Override

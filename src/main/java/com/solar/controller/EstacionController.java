@@ -1,13 +1,20 @@
 package com.solar.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.solar.model.Estacion;
 import com.solar.model.Municipio;
 import com.solar.model.Provedor;
 import com.solar.service.EstacionServiceIMPL;
@@ -28,23 +35,91 @@ public class EstacionController {
 	private ProvedorServiceIMPL provedorServiceIMPL;
 	
 	@PostMapping
-	public String saveEstacion(@RequestParam(name = "estacion") String estacion, @RequestParam(name = "municipio") String municipio, 
-			@RequestParam(name = "provedor") String provedor, RedirectAttributes ra, @RequestParam(name = "lat") String lat,
-			@RequestParam(name = "lon") String lon) {
+	public String saveEstacion(@RequestParam(name = "nombre") String nombre, @RequestParam(name = "municipio") String municipio, 
+			@RequestParam(name = "origen") String origen, RedirectAttributes ra, @RequestParam(name = "lat") String lat,
+			@RequestParam(name = "lon") String lon, @RequestParam(name = "id") String id) {
 		try {
-			Municipio municipioExist = municipioServiceIMPL.findByNombre(municipio);
-			Provedor provedorExist = provedorServiceIMPL.findByNombre(provedor);
-			estacionServiceIMPL.save(estacion, municipioExist, provedorExist, Double.parseDouble(lat), Double.parseDouble(lon));
-			ra.addFlashAttribute("ok", "Estacion registrada");
+			// es una estacioón nueva
+			if (id.equals("")) {
+				Municipio municipioExist = municipioServiceIMPL.findByNombre(municipio);
+				Provedor provedorExist = provedorServiceIMPL.findByNombre(origen);
+				estacionServiceIMPL.save(new Estacion(nombre, municipioExist, provedorExist, Double.valueOf(lat), Double.valueOf(lon)));
+				ra.addFlashAttribute("ok", "Estacion registrada");
+				
+			}else {// se actualiza la estación
+				Estacion estacionExist = estacionServiceIMPL.findById(Integer.parseInt(id));
+				estacionExist.setNombre(nombre);
+				estacionExist.setLat(Double.valueOf(lat));
+				estacionExist.setLon(Double.valueOf(lon));
+				
+				Municipio municipioExist = municipioServiceIMPL.findByNombre(municipio);
+				Provedor provedorExist = provedorServiceIMPL.findByNombre(origen);
+				
+				estacionExist.setMunicipio(municipioExist);
+				estacionExist.setProveedor(provedorExist);
+				
+				estacionServiceIMPL.save(estacionExist);
+				ra.addFlashAttribute("ok", "Estacion actualizada");
+			}
+			
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			ra.addFlashAttribute("error", "No se pudo registrar la estación");
 		}
 		return "redirect:/estaciones";
 	}
 	
+	@GetMapping("/remove/{id_estacion}")
+	public String eliminarMunicipio(Model model, @PathVariable(name = "id_estacion") Integer id_estacion,
+			RedirectAttributes ar) {
+		try {
+			estacionServiceIMPL.removeById(id_estacion);;
+			ar.addFlashAttribute("ok", "Estación eliminada");
+		} catch (Exception e) {
+			ar.addFlashAttribute("error", "No se pudo eliminar la estación");
+		}
+		return "redirect:/estaciones";
+	}
+	
 	@GetMapping
-	public String listEstaciones() {
-		return "";
+	public String listarEstaciones(Model model) {
+		model.addAttribute("id", "");
+		model.addAttribute("nombre", "");
+		model.addAttribute("lat", "");
+		model.addAttribute("lon","");
+		model.addAttribute("municipio", "");
+		model.addAttribute("origen", "");
+		model.addAttribute("estaciones", this.getEstaciones());
+		model.addAttribute("origenes", this.getOrigenes());
+		model.addAttribute("municipios", this.getMunicipios());
+		return "estaciones/list";
+	}
+	
+	@GetMapping("/edit/{id_estacion}")
+	public String editarMunicipio(Model model, @PathVariable(name = "id_estacion") Integer id_estacion) {
+		Estacion estacion = estacionServiceIMPL.findById(id_estacion);
+		model.addAttribute("id", estacion.getId_estacion());
+		model.addAttribute("nombre", estacion.getNombre());
+		model.addAttribute("lat", estacion.getLat());
+		model.addAttribute("lon", estacion.getLon());
+		model.addAttribute("municipio", estacion.getMunicipio().getNombre());
+		model.addAttribute("origen", estacion.getProveedor().getNombre());
+		model.addAttribute("estaciones", this.getEstaciones());
+		model.addAttribute("municipios", this.getMunicipios());
+		model.addAttribute("origenes", this.getOrigenes());
+		return "estaciones/list";
+	}
+	
+	private List<Estacion> getEstaciones() {
+		return estacionServiceIMPL.list();
+	}
+	
+	private List<Provedor> getOrigenes() {
+		return provedorServiceIMPL.list();
+	}
+	
+	private List<Municipio> getMunicipios() {
+		return municipioServiceIMPL.list();
 	}
 	
 }

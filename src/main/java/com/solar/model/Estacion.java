@@ -17,9 +17,6 @@ import javax.persistence.OneToMany;
 @Entity(name = "estaciones")
 public class Estacion implements Serializable{
 	 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 
@@ -28,14 +25,10 @@ public class Estacion implements Serializable{
 	}
 
 	
-	
-
 
 	public String getNombre() {
 		return nombre;
 	}
-
-
 
 
 
@@ -45,13 +38,9 @@ public class Estacion implements Serializable{
 
 
 
-
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-
 
 
 

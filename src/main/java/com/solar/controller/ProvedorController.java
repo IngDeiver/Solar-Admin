@@ -61,8 +61,6 @@ public class ProvedorController {
 			RedirectAttributes ar) {
 		try {
 			provedorServiceIMPL.removeById(id_origen);
-			model.addAttribute("origen", new Provedor());
-			model.addAttribute("origenes", this.getOrigenes());
 			ar.addFlashAttribute("ok", "Origen eliminado");
 		} catch (Exception e) {
 			ar.addFlashAttribute("error", "No se pudo eliminar el origen");
