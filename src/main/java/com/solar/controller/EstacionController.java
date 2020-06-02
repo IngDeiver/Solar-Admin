@@ -3,6 +3,8 @@ package com.solar.controller;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,8 @@ import com.solar.service.ProvedorServiceIMPL;
 @Controller
 @RequestMapping("/estaciones")
 public class EstacionController {
+	
+	
 	
 	@Autowired
 	private EstacionServiceIMPL estacionServiceIMPL;

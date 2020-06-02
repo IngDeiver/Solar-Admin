@@ -34,7 +34,6 @@ public class UserServiceImpl {
 		try {
 			BufferedReader csv = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
 			List<Radiacion> radiaciones = new ArrayList<Radiacion>();
-			System.out.println(estacion.getId_estacion());
 			String line ;
 			while((line = csv.readLine())!= null) {
 				String[] fields = line.split(";");

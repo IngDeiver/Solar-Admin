@@ -2,6 +2,9 @@ package com.solar.controller;
 
 import java.io.IOException;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,12 +22,8 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.solar.model.Estacion;
-import com.solar.model.Municipio;
-import com.solar.model.Provedor;
-import com.solar.model.Radiacion;
-import com.solar.repository.RadiacionRepository;
+import com.solar.model.RadiacionInfo;
 import com.solar.service.EstacionServiceIMPL;
-import com.solar.service.ProvedorServiceIMPL;
 import com.solar.service.UserServiceImpl;
 
 
@@ -32,7 +31,9 @@ import com.solar.service.UserServiceImpl;
 public class UserController {
 
 	@Autowired
-	private RadiacionRepository radiacionRepository;
+	private EntityManager em;
+	
+
 	
 	@Autowired
 	private UserServiceImpl userServiceImpl;
@@ -40,8 +41,6 @@ public class UserController {
 	@Autowired
 	private EstacionServiceIMPL estacionServiceIMPL;
 	
-	@Autowired
-	private ProvedorServiceIMPL provedorServiceIMPL;
 	
 	@GetMapping("/login")
 	public String login() {
@@ -78,12 +77,7 @@ public class UserController {
 	
 	@GetMapping("/")
 	public String home(Model model) {
-		System.out.println(this.getEstaciones().size());
 		model.addAttribute("estaciones", this.getEstaciones());
-		model.addAttribute("provedores", this.getProvedores());
-		model.addAttribute("provedor", new Provedor());
-		model.addAttribute("municipio", new Municipio());
-		model.addAttribute("estacion", new Estacion());
 		return "admin/import";
 	}
 	
@@ -94,25 +88,27 @@ public class UserController {
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + filename + "\"");
         
-        ColumnPositionMappingStrategy<Radiacion> mappingStrategy=  new ColumnPositionMappingStrategy<Radiacion>(); 
-        mappingStrategy.setType(Radiacion.class); 
+        ColumnPositionMappingStrategy<RadiacionInfo> mappingStrategy=  new ColumnPositionMappingStrategy<RadiacionInfo>(); 
+        mappingStrategy.setType(RadiacionInfo.class); 
         
         String[] columns = new String[]  
-                { "fecha", "valor_radiacion"}; 
+                {"Radiacion","Fecha","Origen","Municipio","Lat","Long"}; 
         mappingStrategy.setColumnMapping(columns);
         
       
      // Createing StatefulBeanToCsv object 
-        StatefulBeanToCsvBuilder<Radiacion> builder = new StatefulBeanToCsvBuilder<Radiacion>(response.getWriter()); 
+        StatefulBeanToCsvBuilder<RadiacionInfo> builder = new StatefulBeanToCsvBuilder<RadiacionInfo>(response.getWriter()); 
         
-       StatefulBeanToCsv<Radiacion> beanWriter = builder.withMappingStrategy(mappingStrategy)
+       StatefulBeanToCsv<RadiacionInfo> beanWriter = builder.withMappingStrategy(mappingStrategy)
     		   .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
                .withOrderedResults(false)
                .build();
 
         // Write list to StatefulBeanToCsv object 
-        beanWriter.write(radiacionRepository.findAll());
+       Query query = em.createNativeQuery("select * from radiacion;", RadiacionInfo.class);
+       List<RadiacionInfo> radiacion = (List<RadiacionInfo>) query.getResultList();
+       beanWriter.write(radiacion);
 
         // closing the writer object 
         response.getWriter().close();
@@ -127,9 +123,7 @@ public class UserController {
 		return estacionServiceIMPL.list();
 	}
 	
-	private List<Provedor> getProvedores() {
-		return provedorServiceIMPL.list();
-	}
+
 	
 
 
