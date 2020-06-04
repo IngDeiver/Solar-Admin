@@ -82,7 +82,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/download")
-	public void  downloadData(HttpServletResponse response) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+	public void  downloadData(HttpServletResponse response, @RequestParam(name = "estacion") String estacion) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+		System.out.println("Estacion -> " + estacion);
 		String filename = "radiación solar - SPEC.csv";
 		response.setContentType("text/csv");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
@@ -92,7 +93,7 @@ public class UserController {
         mappingStrategy.setType(RadiacionInfo.class); 
         
         String[] columns = new String[]  
-                {"Radiacion","Fecha","Origen","Municipio","Lat","Long"}; 
+                {"id","estacion","municipio","origen","lat","lon","radiacion","fecha"}; 
         mappingStrategy.setColumnMapping(columns);
         
       
@@ -104,12 +105,16 @@ public class UserController {
                .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
                .withOrderedResults(false)
                .build();
-
         // Write list to StatefulBeanToCsv object 
-       Query query = em.createNativeQuery("select * from radiacion;", RadiacionInfo.class);
+       Query query = em.createNativeQuery("select * from GET_RADIACION_FROM_ESTACION(:estacion);", RadiacionInfo.class);
+       if(estacion.equals("all_stations")) {
+    	   query = em.createNativeQuery("select * from radiacion;", RadiacionInfo.class);
+       }else {
+    	   query.setParameter("estacion", estacion);
+       }
+       @SuppressWarnings("unchecked")
        List<RadiacionInfo> radiacion = (List<RadiacionInfo>) query.getResultList();
        beanWriter.write(radiacion);
-
         // closing the writer object 
         response.getWriter().close();
 	}

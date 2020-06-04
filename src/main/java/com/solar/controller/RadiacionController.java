@@ -1,6 +1,5 @@
 package com.solar.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -22,6 +21,7 @@ public class RadiacionController {
 	@Autowired
 	private EntityManager em;
 	
+	@SuppressWarnings("unchecked")
 	@GetMapping("/getRadiacion")
 	public List<RadiacionInfo> getRadiacion() {
 		Query query = em.createNativeQuery("select * from radiacion", RadiacionInfo.class);
@@ -29,6 +29,7 @@ public class RadiacionController {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@GetMapping("/getRadiacionByOrigen/{origen}")
 	public List<RadiacionInfo> getRadiacionByOrigen(@PathVariable(name = "origen") String origen) {
 		Query query = em.createNativeQuery("select * from GET_RADIACION_FROM_ORIGEN(:origen);", RadiacionInfo.class);

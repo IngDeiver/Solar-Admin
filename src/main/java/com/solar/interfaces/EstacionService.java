@@ -3,8 +3,6 @@ package com.solar.interfaces;
 import java.util.List;
 
 import com.solar.model.Estacion;
-import com.solar.model.Municipio;
-import com.solar.model.Provedor;
 
 public interface EstacionService {
 	public Estacion save(Estacion estacion);

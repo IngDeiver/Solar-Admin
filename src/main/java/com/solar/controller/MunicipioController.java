@@ -35,8 +35,7 @@ public class MunicipioController {
 			
 			ra.addFlashAttribute("ok", "Municipio registrado");
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			ra.addFlashAttribute("error", "No se pudo registrar el municipio");
+			ra.addFlashAttribute("error", "No se pudo registrar el municipio "+e.getMessage());
 		}
 		return "redirect:/municipios";
 	}

@@ -3,13 +3,11 @@ package com.solar.controller;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +20,8 @@ import com.solar.model.Provedor;
 import com.solar.service.EstacionServiceIMPL;
 import com.solar.service.MunicipioServiceIMPL;
 import com.solar.service.ProvedorServiceIMPL;
+import com.solar.windingnumber.Point;
+import com.solar.windingnumber.Polygon;
 
 @Controller
 @RequestMapping("/estaciones")
@@ -38,37 +38,46 @@ public class EstacionController {
 	@Autowired
 	private ProvedorServiceIMPL provedorServiceIMPL;
 	
+	@Autowired
+	private Polygon windingNumber;
+	
 	@PostMapping
 	public String saveEstacion(@RequestParam(name = "nombre") String nombre, @RequestParam(name = "municipio") String municipio, 
 			@RequestParam(name = "origen") String origen, RedirectAttributes ra, @RequestParam(name = "lat") String lat,
 			@RequestParam(name = "lon") String lon, @RequestParam(name = "id") String id) {
 		try {
-			// es una estacioón nueva
-			if (id.equals("")) {
-				Municipio municipioExist = municipioServiceIMPL.findByNombre(municipio);
-				Provedor provedorExist = provedorServiceIMPL.findByNombre(origen);
-				estacionServiceIMPL.save(new Estacion(nombre, municipioExist, provedorExist, Double.valueOf(lat), Double.valueOf(lon)));
-				ra.addFlashAttribute("ok", "Estacion registrada");
-				
-			}else {// se actualiza la estación
-				Estacion estacionExist = estacionServiceIMPL.findById(Integer.parseInt(id));
-				estacionExist.setNombre(nombre);
-				estacionExist.setLat(Double.valueOf(lat));
-				estacionExist.setLon(Double.valueOf(lon));
-				
-				Municipio municipioExist = municipioServiceIMPL.findByNombre(municipio);
-				Provedor provedorExist = provedorServiceIMPL.findByNombre(origen);
-				
-				estacionExist.setMunicipio(municipioExist);
-				estacionExist.setProveedor(provedorExist);
-				
-				estacionServiceIMPL.save(estacionExist);
-				ra.addFlashAttribute("ok", "Estacion actualizada");
+			
+			// si las coordernadas son validas
+			if(this.locationIsValid(new Point(Double.valueOf(lon), Double.valueOf(lat))) == 1) {
+				// es una estacioón nueva
+				if (id.equals("")) {
+					Municipio municipioExist = municipioServiceIMPL.findByNombre(municipio);
+					Provedor provedorExist = provedorServiceIMPL.findByNombre(origen);
+					estacionServiceIMPL.save(new Estacion(nombre, municipioExist, provedorExist, Double.valueOf(lat), Double.valueOf(lon)));
+					ra.addFlashAttribute("ok", "Estacion registrada");
+					
+				}else {// se actualiza la estación
+					Estacion estacionExist = estacionServiceIMPL.findById(Integer.parseInt(id));
+					estacionExist.setNombre(nombre);
+					estacionExist.setLat(Double.valueOf(lat));
+					estacionExist.setLon(Double.valueOf(lon));
+					
+					Municipio municipioExist = municipioServiceIMPL.findByNombre(municipio);
+					Provedor provedorExist = provedorServiceIMPL.findByNombre(origen);
+					
+					estacionExist.setMunicipio(municipioExist);
+					estacionExist.setProveedor(provedorExist);
+					
+					estacionServiceIMPL.save(estacionExist);
+					ra.addFlashAttribute("ok", "Estacion actualizada");
+				}
+			}
+			else {// si las coordenadas no son validas
+				ra.addFlashAttribute("error", "Coordernadas no validas. Las coordernadas escritas no pertenecen al departamento de Santander.");
 			}
 			
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			ra.addFlashAttribute("error", "No se pudo registrar la estación");
+			ra.addFlashAttribute("error", "No se pudo registrar la estación "+e.getCause());
 		}
 		return "redirect:/estaciones";
 	}
@@ -126,4 +135,11 @@ public class EstacionController {
 		return municipioServiceIMPL.list();
 	}
 	
+	private int locationIsValid(Point point) {
+		int isValid = 1;
+//		if(windingNumber.inPolygon(point) == 0) {
+//			isValid = 0;
+//		}
+		return isValid;
+	}
 }

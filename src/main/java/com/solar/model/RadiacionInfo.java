@@ -2,16 +2,15 @@ package com.solar.model;
 
 import java.sql.Timestamp;
 
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Immutable;
+
 
 //@SqlResultSetMapping(name = "RadiacionInfo", classes = {
 //		@ConstructorResult(targetClass = RadiacionInfo.class, columns = {
@@ -27,87 +26,138 @@ import org.hibernate.annotations.Immutable;
 public class RadiacionInfo {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer Id;
-	private String Estacion;
-	private String Municipio;
-	private String Origen;
-	private Double Lat;
-	private Double Long;
-	private Double Radiacion;
-	private Timestamp Fecha;
+	@Column(name = "Id")
+	private Integer id;
+	@Column(name = "Estacion")
+	private String estacion;
+	@Column(name = "Municipio")
+	private String municipio;
+	@Column(name = "Origen")
+	private String origen;
+	@Column(name = "Lat")
+	private Double lat;
+	@Column(name = "Long")
+	private Double lon;
+	@Column(name = "Radiacion")
+	private Double radiacion;
+	@Column(name = "Fecha")
+	private Timestamp fecha;
 	
-	
-	public RadiacionInfo(String estacion, String municipio, String origen, Double lat, Double l, Double radiacion,
-			Timestamp fecha) {
+
+
+	public RadiacionInfo(Integer id, String estacion, String municipio, String origen, Double lat, Double lon,
+			Double radiacion, Timestamp fecha) {
 		super();
-		Estacion = estacion;
-		Municipio = municipio;
-		Origen = origen;
-		Lat = lat;
-		Long = l;
-		Radiacion = radiacion;
-		Fecha = fecha;
+		this.id = id;
+		this.estacion = estacion;
+		this.municipio = municipio;
+		this.origen = origen;
+		this.lat = lat;
+		this.lon = lon;
+		this.radiacion = radiacion;
+		this.fecha = fecha;
 	}
+
+
 
 	public RadiacionInfo() {
 		
 	}
-	
-	
-	
-	
+
+
+
 	public Integer getId() {
-		return Id;
+		return id;
 	}
+
+
 
 	public void setId(Integer id) {
-		Id = id;
+		this.id = id;
 	}
+
+
 
 	public String getEstacion() {
-		return Estacion;
+		return estacion;
 	}
+
+
+
 	public void setEstacion(String estacion) {
-		Estacion = estacion;
+		this.estacion = estacion;
 	}
+
+
+
 	public String getMunicipio() {
-		return Municipio;
+		return municipio;
 	}
+
+
+
 	public void setMunicipio(String municipio) {
-		Municipio = municipio;
+		this.municipio = municipio;
 	}
+
+
 
 	public String getOrigen() {
-		return Origen;
+		return origen;
 	}
+
+
 
 	public void setOrigen(String origen) {
-		Origen = origen;
+		this.origen = origen;
 	}
 
+
+
 	public Double getLat() {
-		return Lat;
+		return lat;
 	}
+
+
+
 	public void setLat(Double lat) {
-		Lat = lat;
+		this.lat = lat;
 	}
-	public Double getLong() {
-		return Long;
+
+
+
+	public Double getLon() {
+		return lon;
 	}
-	public void setLong(Double l) {
-		Long = l;
+
+
+
+	public void setLon(Double lon) {
+		this.lon = lon;
 	}
+
+
+
 	public Double getRadiacion() {
-		return Radiacion;
+		return radiacion;
 	}
+
+
+
 	public void setRadiacion(Double radiacion) {
-		Radiacion = radiacion;
+		this.radiacion = radiacion;
 	}
+
+
+
 	public Timestamp getFecha() {
-		return Fecha;
+		return fecha;
 	}
+
+
+
 	public void setFecha(Timestamp fecha) {
-		Fecha = fecha;
+		this.fecha = fecha;
 	}
 	
 	
