@@ -52,7 +52,7 @@ public class UserController {
 			RedirectAttributes ra) {
 		
 		try {
-			Estacion existEstacion = estacionServiceIMPL.findByNombre_estacion(estacion.toUpperCase());
+			Estacion existEstacion = estacionServiceIMPL.findByNombre_estacion(estacion);
 			
 			if(existEstacion != null) {
 				System.out.println(existEstacion.getNombre());
