@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +21,7 @@ import com.solar.service.EstacionServiceIMPL;
 
 
 @Component
+@Profile("!dev")
 public class WundergroundService {
 
 
@@ -36,7 +38,6 @@ public class WundergroundService {
 		System.out.println("Ejecutando para isantand 30!");
 		try {
 			String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-			date ="20190604";
 			String uri = "https://api.weather.com/v2/pws/history/hourly?stationId=ISANTAND30&format=json&units=m&date="+date+"&apiKey=b3bc2e2c48a644b6bc2e2c48a614b691";
 			
 			RestTemplate restTemplate = new RestTemplate();
@@ -47,13 +48,15 @@ public class WundergroundService {
 			
 			System.out.println(radiaciones.size() +"datos encontrados");
 			
-			if(radiaciones.size()>0) {
-				for(IsantandRadiaction radiacion : radiaciones) {
-					Radiacion currentRadiation = new Radiacion(Isantand30, Double.valueOf(radiacion.getSolarRadiationHigh()), Timestamp.valueOf(radiacion.getObsTimeLocal()));
-					radiacionesAguardar.add(currentRadiation);
+			if(Isantand30 != null) {
+				if(radiaciones.size()>0) {
+					for(IsantandRadiaction radiacion : radiaciones) {
+						Radiacion currentRadiation = new Radiacion(Isantand30, Double.valueOf(radiacion.getSolarRadiationHigh()), Timestamp.valueOf(radiacion.getObsTimeLocal()));
+						radiacionesAguardar.add(currentRadiation);
+					}
+					radiacionRepository.saveAll(radiacionesAguardar);
+					System.out.println("Se guardaron " + radiacionesAguardar.size() +" datos");
 				}
-				radiacionRepository.saveAll(radiacionesAguardar);
-				System.out.println("Se guardaron " + radiacionesAguardar.size() +" datos");
 			}
 			
 			
@@ -75,17 +78,19 @@ public class WundergroundService {
 			IsantandService isantand = restTemplate.getForObject(uri, IsantandService.class);
 			List<IsantandRadiaction> radiaciones = isantand.getObservations();
 			List<Radiacion> radiacionesAguardar = new ArrayList<>();
-			Estacion Isantand30 = estacionServiceIMPL.findByNombre_estacion("Paralela Bosque");
+			Estacion Isantand31 = estacionServiceIMPL.findByNombre_estacion("Paralela Bosque");
 			
 			System.out.println(radiaciones.size() +"datos encontrados");
 			
-			if(radiaciones.size()>0) {
-				for(IsantandRadiaction radiacion : radiaciones) {
-					Radiacion currentRadiation = new Radiacion(Isantand30, Double.valueOf(radiacion.getSolarRadiationHigh()), Timestamp.valueOf(radiacion.getObsTimeLocal()));
-					radiacionesAguardar.add(currentRadiation);
+			if(Isantand31 != null ) {
+				if(radiaciones.size()>0) {
+					for(IsantandRadiaction radiacion : radiaciones) {
+						Radiacion currentRadiation = new Radiacion(Isantand31, Double.valueOf(radiacion.getSolarRadiationHigh()), Timestamp.valueOf(radiacion.getObsTimeLocal()));
+						radiacionesAguardar.add(currentRadiation);
+					}
+					radiacionRepository.saveAll(radiacionesAguardar);
+					System.out.println("Se guardaron " + radiacionesAguardar.size() +" datos");
 				}
-				radiacionRepository.saveAll(radiacionesAguardar);
-				System.out.println("Se guardaron " + radiacionesAguardar.size() +" datos");
 			}
 			
 			

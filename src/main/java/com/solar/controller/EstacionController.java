@@ -46,20 +46,30 @@ public class EstacionController {
 			@RequestParam(name = "origen") String origen, RedirectAttributes ra, @RequestParam(name = "lat") String lat,
 			@RequestParam(name = "lon") String lon, @RequestParam(name = "id") String id) {
 		try {
+			Double latitude = 0.0;
+			Double longitude = 0.0;
+			
+			try {
+				latitude = Double.valueOf(lat);
+				longitude = Double.valueOf(lon);
+			} catch (Exception e) {
+				ra.addFlashAttribute("error", "Las coordenadas deben ser numericas.");
+				return "redirect:/estaciones";
+			}
 			
 			// si las coordernadas son validas
-			if(this.locationIsValid(new Point(Double.valueOf(lon), Double.valueOf(lat))) == 1) {
+			if(this.locationIsValid(new Point(longitude,latitude )) == 1) {
 				// es una estacioón nueva
 				if (id.equals("")) {
 					Municipio municipioExist = municipioServiceIMPL.findByNombre(municipio);
 					Provedor provedorExist = provedorServiceIMPL.findByNombre(origen);
-					estacionServiceIMPL.save(new Estacion(nombre, municipioExist, provedorExist, Double.valueOf(lat), Double.valueOf(lon)));
+					estacionServiceIMPL.save(new Estacion(nombre, municipioExist, provedorExist, latitude, longitude));
 					ra.addFlashAttribute("ok", "Estacion registrada");
 					
 				}else {// se actualiza la estación
 					Estacion estacionExist = estacionServiceIMPL.findById(Integer.parseInt(id));
 					estacionExist.setNombre(nombre);
-					estacionExist.setLat(Double.valueOf(lat));
+					estacionExist.setLat(Double.valueOf(latitude));
 					estacionExist.setLon(Double.valueOf(lon));
 					
 					Municipio municipioExist = municipioServiceIMPL.findByNombre(municipio);
@@ -137,9 +147,9 @@ public class EstacionController {
 	
 	private int locationIsValid(Point point) {
 		int isValid = 1;
-//		if(windingNumber.inPolygon(point) == 0) {
-//			isValid = 0;
-//		}
+		if(windingNumber.inPolygon(point) == 0) {
+			isValid = 0;
+		}
 		return isValid;
 	}
 }
