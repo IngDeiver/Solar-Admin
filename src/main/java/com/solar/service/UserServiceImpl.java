@@ -28,7 +28,7 @@ public class UserServiceImpl {
 	
 	
 	
-	public Boolean saveRadiacion(MultipartFile file, Estacion estacion) throws IOException {
+	public Boolean saveRadiacion(MultipartFile file, Estacion estacion, String format) throws IOException {
 
 		Boolean ok = true;
 		try {
@@ -42,7 +42,7 @@ public class UserServiceImpl {
 					
 					try {
 						currentRadiacion.setEstacion(estacion);
-						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+						DateFormat dateFormat = new SimpleDateFormat(format);
 						Date date = dateFormat.parse(fields[0]);
 						long time = date.getTime();
 						currentRadiacion.setFecha(new Timestamp(time));

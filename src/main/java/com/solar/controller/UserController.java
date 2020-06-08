@@ -49,14 +49,13 @@ public class UserController {
 	
 	@PostMapping("/import")
 	public String importFile(@RequestParam(name = "file") MultipartFile file, @RequestParam(name = "estacion") String estacion,
-			RedirectAttributes ra) {
+			RedirectAttributes ra, @RequestParam(name = "format") String format) {
 		
 		try {
 			Estacion existEstacion = estacionServiceIMPL.findByNombre_estacion(estacion);
 			
 			if(existEstacion != null) {
-				System.out.println(existEstacion.getNombre());
-				if (userServiceImpl.saveRadiacion(file, existEstacion)) {
+				if (userServiceImpl.saveRadiacion(file, existEstacion, format)) {
 					ra.addFlashAttribute("ok", "Datos importados correctamente");
 					
 				}else {
