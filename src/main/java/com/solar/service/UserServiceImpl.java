@@ -43,7 +43,12 @@ public class UserServiceImpl {
 					try {
 						currentRadiacion.setEstacion(estacion);
 						DateFormat dateFormat = new SimpleDateFormat(format);
-						Date date = dateFormat.parse(fields[0]);
+						String dateString = fields[0];
+						if(dateString.contains("-")) {
+							dateString = dateString.replace("-","/");
+							System.out.println(dateString);
+						}
+						Date date = dateFormat.parse(dateString);
 						long time = date.getTime();
 						currentRadiacion.setFecha(new Timestamp(time));
 						currentRadiacion.setValor_radiacion(Double.parseDouble(fields[1]));

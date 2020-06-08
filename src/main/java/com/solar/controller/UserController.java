@@ -59,9 +59,12 @@ public class UserController {
 					ra.addFlashAttribute("ok", "Datos importados correctamente");
 					
 				}else {
-					ra.addFlashAttribute("error", "Ocurrio un error al guardar 1");
+					ra.addFlashAttribute("error", "Ocurrio un error al guardar, asegurese de tener un formato de fecha valido e intente"
+							+ " nuevamente.");
 				}
 				
+			}else {
+				ra.addFlashAttribute("error", "Estación no valida.");
 			}
 			
 			
