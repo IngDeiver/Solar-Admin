@@ -14,14 +14,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solar.exception.RestException;
+import com.solar.model.EstacionInfo;
 import com.solar.model.RadiacionInfo;
 
 @RestController
 @RequestMapping("/api")
-public class RadiacionController {
+public class ApiController {
 
 	@Autowired
 	private EntityManager em;
+	
+	
+	// api for estaciones
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("/getEstaciones")
+	public List<EstacionInfo> getEstaciones() throws RestException{
+		try {
+			Query query = em.createNativeQuery("select * from GET_STATIONS();", EstacionInfo.class);
+			return (List<EstacionInfo>) query.getResultList();
+		} catch (Exception e) {
+			throw  new RestException("Error:"+e.getMessage());
+		}
+		
+	}
+	
+	// api for radiación
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping("/getRadiacion")

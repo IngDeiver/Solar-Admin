@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+
 @Entity(name = "municipios")
 public class Municipio implements Serializable {
 
@@ -21,6 +22,7 @@ public class Municipio implements Serializable {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_municipio;
+	
 	
 	@OneToMany(mappedBy = "municipio", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Estacion> estaciones;

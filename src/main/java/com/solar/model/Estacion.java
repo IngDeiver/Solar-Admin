@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 
+
 @Entity(name = "estaciones")
 public class Estacion implements Serializable{
 	 
@@ -49,14 +50,13 @@ public class Estacion implements Serializable{
 	
 	@Column(unique = true, nullable = false, length = 100, name = "nombre_estacion")
 	private String nombre;
-	
-	
+
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_municipio")
 	private Municipio municipio;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "id_origen")
 	private Provedor provedor;
 	
