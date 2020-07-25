@@ -54,6 +54,20 @@ public class ApiController {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@GetMapping("/getRadiacionByDate/{date}")
+	public List<RadiacionInfo> getRadiacionByDate(@PathVariable(name = "date") String date) throws RestException {
+		try {
+			System.out.println(">>>>>>>>"+date);
+			Query query = em.createNativeQuery("select * from GET_RADIACION_BY_DATE(:date);", RadiacionInfo.class);
+			query.setParameter("date", Timestamp.valueOf(date), TemporalType.DATE);
+			return (List<RadiacionInfo>) query.getResultList();
+		} catch (Exception e) {
+			throw  new RestException("Asegurese de escribir el siguiente formato: yyyy-mm-dd hh:mm:ss. Error: "+e.getMessage());
+		}
+		
+	}
+	
+	@SuppressWarnings("unchecked")
 	@GetMapping("/getRadiacionByOrigen/{origen}")
 	public List<RadiacionInfo> getRadiacionByOrigen(@PathVariable(name = "origen") String origen) throws RestException {
 		try {

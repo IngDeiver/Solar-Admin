@@ -51,8 +51,20 @@ public class WundergroundService {
 			if(Isantand30 != null) {
 				if(radiaciones.size()>0) {
 					for(IsantandRadiaction radiacion : radiaciones) {
-						Radiacion currentRadiation = new Radiacion(Isantand30, Double.valueOf(radiacion.getSolarRadiationHigh()), Timestamp.valueOf(radiacion.getObsTimeLocal()));
-						radiacionesAguardar.add(currentRadiation);
+						try {
+							Double valor_radiacion = Double.valueOf(radiacion.getSolarRadiationHigh());
+							
+							if(valor_radiacion < 0 || valor_radiacion > 900) {
+								continue;
+							}
+							
+							Radiacion currentRadiation = new Radiacion(Isantand30, valor_radiacion, Timestamp.valueOf(radiacion.getObsTimeLocal()));
+							radiacionesAguardar.add(currentRadiation);
+							
+						} catch (Exception e) {
+							System.out.println(e.getMessage());
+							continue;
+						}
 					}
 					radiacionRepository.saveAll(radiacionesAguardar);
 					System.out.println("Se guardaron " + radiacionesAguardar.size() +" datos");

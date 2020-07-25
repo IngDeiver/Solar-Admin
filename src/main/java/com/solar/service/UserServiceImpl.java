@@ -38,7 +38,7 @@ public class UserServiceImpl {
 			while((line = csv.readLine())!= null) {
 				String[] fields = line.split(";");
 				Radiacion currentRadiacion = new Radiacion();
-				if(fields.length == 2) {
+				if(fields.length >= 2) {
 					
 					try {
 						currentRadiacion.setEstacion(estacion);
@@ -51,7 +51,13 @@ public class UserServiceImpl {
 						Date date = dateFormat.parse(dateString);
 						long time = date.getTime();
 						currentRadiacion.setFecha(new Timestamp(time));
-						currentRadiacion.setValor_radiacion(Double.parseDouble(fields[1]));
+						Double valor_radiacion = Double.parseDouble(fields[1]);
+						
+						if(valor_radiacion < 0 || valor_radiacion > 900) {
+							continue;
+						}
+							
+						currentRadiacion.setValor_radiacion(valor_radiacion);
 						radiaciones.add(currentRadiacion);
 					} catch (Exception e) {
 						continue;
