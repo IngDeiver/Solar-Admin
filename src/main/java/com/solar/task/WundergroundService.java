@@ -54,7 +54,7 @@ public class WundergroundService {
 						try {
 							Double valor_radiacion = Double.valueOf(radiacion.getSolarRadiationHigh());
 							
-							if(valor_radiacion < 0 || valor_radiacion > 900) {
+							if(valor_radiacion < 0 || valor_radiacion > 1000) {
 								continue;
 							}
 							

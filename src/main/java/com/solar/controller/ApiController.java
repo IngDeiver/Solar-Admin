@@ -57,7 +57,6 @@ public class ApiController {
 	@GetMapping("/getRadiacionByDate/{date}")
 	public List<RadiacionInfo> getRadiacionByDate(@PathVariable(name = "date") String date) throws RestException {
 		try {
-			System.out.println(">>>>>>>>"+date);
 			Query query = em.createNativeQuery("select * from GET_RADIACION_BY_DATE(:date);", RadiacionInfo.class);
 			query.setParameter("date", Timestamp.valueOf(date), TemporalType.DATE);
 			return (List<RadiacionInfo>) query.getResultList();
@@ -111,7 +110,7 @@ public class ApiController {
 	public List<RadiacionInfo> getRadiacionByEstacionAndDate(@PathVariable(name = "estacion") String estacion,
 			@PathVariable(name = "date") String date) throws RestException {
 		try {
-			Query query = em.createNativeQuery("select * from GET_RADIACION_FROM_ESTACION_AND_DATE(:estacion, :date);", RadiacionInfo.class);
+			Query query = em.createNativeQuery("select * from GET_RADIACION_FROM_ESTACION_AND_DATE_WITHOUT_TIME(:estacion, :date);", RadiacionInfo.class);
 			query.setParameter("estacion", estacion);
 			query.setParameter("date", Timestamp.valueOf(date), TemporalType.DATE);
 			return (List<RadiacionInfo>) query.getResultList();
@@ -135,6 +134,22 @@ public class ApiController {
 		}
 		
 	}
+	
+//	@SuppressWarnings("unchecked")
+//	@GetMapping("/getRadiacionByPointAndDate/{lat}/{lon}/{date}")
+//	public List<RadiacionInfo> getRadiacionByPointAndDate(@PathVariable(name = "lat") String lat,
+//			@PathVariable(name = "lon") String lon,@PathVariable(name = "date") String date) throws RestException {
+//		try {
+//			Query query = em.createNativeQuery("select * from GET_RADIACION_FROM_MUNICIPIO_AND_DATE(:lat, :lon, :date);", RadiacionInfo.class);
+//			query.setParameter("lat", lat);
+//			query.setParameter("lon", lon);
+//			query.setParameter("date", Timestamp.valueOf(date), TemporalType.DATE);
+//			return (List<RadiacionInfo>) query.getResultList();
+//		} catch (Exception e) {
+//			throw  new RestException("Asegurese de escribir el siguiente formato: yyyy-mm-dd hh:mm:ss. Error: "+e.getMessage());
+//		}
+//		
+//	}
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping("/getRadiacionByOrigenAndDate/{origen}/{date}")

@@ -51,9 +51,9 @@ public class UserServiceImpl {
 						Date date = dateFormat.parse(dateString);
 						long time = date.getTime();
 						currentRadiacion.setFecha(new Timestamp(time));
-						Double valor_radiacion = Double.parseDouble(fields[1]);
+						Double valor_radiacion = Double.parseDouble(fields[1]);// SI ES VACIO CONTINUA
 						
-						if(valor_radiacion < 0 || valor_radiacion > 900) {
+						if(valor_radiacion < 0 || valor_radiacion > 1000) {
 							continue;
 						}
 							
