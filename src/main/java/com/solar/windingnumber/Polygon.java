@@ -70,14 +70,13 @@ public class Polygon {
     return wn;
     }
     private void start() throws FileNotFoundException, IOException, URISyntaxException{
-    	URI uri = ClassLoader.getSystemResource("Polygons/Santander.geo.json").toURI();
+    	URI uri = ClassLoader.getSystemResource("Metropolitana.border.geo.json").toURI();
     	String mainPath = Paths.get(uri).toString();
         String text = new String(Files.readAllBytes(Paths.get(mainPath)), StandardCharsets.UTF_8);
         JSONObject obj = new JSONObject(text);
         
-        JSONArray array = obj.getJSONArray("features")
+        JSONArray array = obj.getJSONArray("geometries")
                 .getJSONObject(0)
-                .getJSONObject("geometry")
                 .getJSONArray("coordinates")
                 .getJSONArray(0);
         
